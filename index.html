@@ -6,6 +6,8 @@
   <title>GP9</title>
   <style></style>
   <script>
+    var out;
+    var num;
     function gp9() { 
       var start = new Number(document.getElementById('startin').value);
       var end = new Number(document.getElementById('endin').value);
@@ -20,9 +22,11 @@
           document.getElementById('outputProg').value = (parseInt(document.getElementById('outputProg').value) + 1).toString();
           document.getElementById('outputPerc').innerHTML = (parseInt(document.getElementById('outputProg').value) / parseInt(document.getElementById('outputProg').max) * 100) + "%";
         }else{
-          var out = response.split(`Res:`)[1];
-          document.getElementById('output').value = out;
-          document.getElementById('output2').innerHTML = out;
+          out = response.split(`Res:`)[1];
+          num = out.split(';').length - 1;
+          var op = out + "Therefore, the number of possible combinations for the calculated amount is: " + num + ".";
+          document.getElementById('output').value = op;
+          document.getElementById('output2').innerHTML = op;
           document.getElementById('outputPerc').innerHTML = "100%";
           document.getElementById('outputProg').value = document.getElementById('outputProg').max;
             worker1 = null;
@@ -60,7 +64,7 @@
   <div class="w3-margin">
     <h2>Find all</h2>
     <div class="w3-bar">
-      <input class="w3-input w3-bar-item" id="startin" placeholder="Enter the start fraction out of 4:" type="text" value="1"/>
+      <input class="w3-input w3-bar-item" id="startin" placeholder="Enter the start fraction out of 4:" type="text" value="0"/>
       <input class="w3-input w3-bar-item" id="endin" placeholder="Enter the end fraction out of 4:" type="text" value="4" />
       <button onclick="gp9()"
         class="w3-show-inline-block w3-blue w3-btn w3-border-blue w3-button w3-ripple w3-border w3-round-xxlarge">

@@ -12,7 +12,7 @@ self.addEventListener('message', function(msg){
 						var n2 = set[j];
 						var n3 = set[k];
 						var n4 = set[l];
-						result += `#1: ${n1} #2: ${n2} #3: ${n3} #4: ${n4} <br>`;
+						result += `#1: ${n1}, #2: ${n2}, #3: ${n3}, #4: ${n4}; <br>`;
 						self.postMessage("Perc");
 					}
 				}
