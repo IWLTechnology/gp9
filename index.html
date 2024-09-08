@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+  <title>GP9</title>
+  <style></style>
+  <script>
+    function gp9() { 
+      var start = new Number(document.getElementById('startin').value);
+      var end = new Number(document.getElementById('endin').value);
+      document.getElementById('outputProg').value = "0";
+      var diff = end-start;
+      document.getElementById('outputProg').max = 1679616 * diff/4;
+      document.getElementById('outputPerc').innerHTML = "0%";
+       var worker1 = new Worker('worker.js');
+       worker1.addEventListener('message', function(evt){
+        var response = evt.data;
+        if(response.search('Res:') == -1){
+          document.getElementById('outputProg').value = (parseInt(document.getElementById('outputProg').value) + 1).toString();
+          document.getElementById('outputPerc').innerHTML = (parseInt(document.getElementById('outputProg').value) / parseInt(document.getElementById('outputProg').max) * 100) + "%";
+        }else{
+          var out = response.split(`Res:`)[1];
+          document.getElementById('output').value = out;
+          document.getElementById('output2').innerHTML = out;
+          document.getElementById('outputPerc').innerHTML = "100%";
+          document.getElementById('outputProg').value = document.getElementById('outputProg').max;
+            worker1 = null;
+          }
+      }, false);
+      worker1.postMessage(`${start}:${end}`);
+    }
+    function cp() {
+      var copyText = document.getElementById("output");
+      if (copyText.value != "") {
+        copyText.select();
+        copyText.setSelectionRange(0, 999999999999999);
+        navigator.clipboard.writeText(copyText.value);
+        document.getElementById("copy").innerHTML = "Copied!";
+        setTimeout(function () {
+          document.getElementById("copy").innerHTML = "Copy";
+        }, 1000);
+      }
+    }
+    function toggleResult() {
+      if (document.getElementById('outputButton').innerHTML == 'Hide result') {
+        document.getElementById('output2').style.display = 'none';
+        document.getElementById('outputButton').innerHTML = 'Show result';
+      } else {
+        document.getElementById('output2').style.display = 'inline-block';
+        document.getElementById('outputButton').innerHTML = 'Hide result';
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <h1 class="w3-center">GP9</h1>
+  <hr />
+  <div class="w3-margin">
+    <h2>Find all</h2>
+    <div class="w3-bar">
+      <input class="w3-input w3-bar-item" id="startin" placeholder="Enter the start fraction out of 4:" type="text" value="1"/>
+      <input class="w3-input w3-bar-item" id="endin" placeholder="Enter the end fraction out of 4:" type="text" value="2" />
+      <button onclick="gp9()"
+        class="w3-show-inline-block w3-blue w3-btn w3-border-blue w3-button w3-ripple w3-border w3-round-xxlarge">
+        Calculate
+      </button>
+      <br>
+      <br>
+      <div class="w3-bar">
+        <input id="output" type="text" disabled class="w3-disabled w3-input w3-bar-item" style="display: none;"
+          placeholder="The output will go here">
+        <p class="w3-bar-item">Result: <span style="display: none;" id="output2"></span><button
+            class="w3-show-inline-block w3-blue w3-btn w3-border-blue w3-button w3-ripple w3-border w3-round-xxlarge"
+            id="outputButton" onclick="toggleResult()">Show result</button></p>
+        <button onclick="cp()"
+          class="w3-show-inline-block w3-blue w3-btn w3-border-blue w3-button w3-ripple w3-border w3-round-xxlarge"
+          id="copy">
+          Copy
+        </button>
+        <progress id="outputProg" value="0" max="100"></progress>
+        <span id="outputPerc">0%</span>
+      </div>
+    </div>
+  </div>
+  <hr />
+</body>
+
+</html>
